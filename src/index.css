@@ -28,8 +28,9 @@
     --background-color: #fff;
     --foreground-color: #111827;
     --foreground-color-light: #6b7280;
-    --gray-color: #f3f4f6;
-    --dark-gray-color: #9ca3af;
+    --gray-color-500: #f3f4f6;
+    --gray-color-700: #9ca3af;
+    --border-radius-md: 8px;
 }
 
 body {
