@@ -12,6 +12,13 @@ export default {
                 secondary: {
                     600: 'var(--secondary-color-600)',
                 },
+                gray: {
+                    500: 'var(--gray-color-500)',
+                    700: 'var(--gray-color-700)',
+                },
+            },
+            borderRadius: {
+                md: 'var(--border-radius-md)',
             },
         },
     },
