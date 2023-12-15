@@ -20,6 +20,9 @@ export default {
             borderRadius: {
                 md: 'var(--border-radius-md)',
             },
+            transitionProperty: {
+                transform: 'transform',
+            },
         },
     },
     plugins: [],
