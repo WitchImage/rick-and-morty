@@ -1,0 +1,38 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+    h1 {
+        @apply text-4xl;
+    }
+
+    h2 {
+        @apply text-3xl;
+    }
+
+    h3 {
+        @apply text-2xl;
+    }
+
+    h4 {
+        @apply text-xl;
+    }
+}
+
+:root {
+    --primary-color-100: #eee3ff;
+    --primary-color-600: #8054c7;
+    --primary-color-700: #5a3696;
+    --secondary-color-600: #63d838;
+    --background-color: #fff;
+    --foreground-color: #111827;
+    --foreground-color-light: #6b7280;
+    --gray-color: #f3f4f6;
+    --dark-gray-color: #9ca3af;
+}
+
+body {
+    background-color: var(--background-color);
+    color: var(--foreground-color);
+}
