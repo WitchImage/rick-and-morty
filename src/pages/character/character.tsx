@@ -5,6 +5,7 @@ import type { Character } from '@/types';
 import { useQuery } from '@apollo/client';
 import { useNavigate, useParams } from 'react-router-dom';
 import { FaArrowLeft } from 'react-icons/fa';
+import StarButton from '@/components/star-button';
 
 export default function Character() {
     const navigate = useNavigate();
@@ -39,6 +40,10 @@ export default function Character() {
                             src={image}
                             alt={`Imagen de ${name}`}
                             className="w-full h-full rounded-full"
+                        />
+                        <StarButton
+                            character={character}
+                            className="absolute bottom-0 right-0 bg-white"
                         />
                     </div>
                     <div className="flex items-center gap-4">
