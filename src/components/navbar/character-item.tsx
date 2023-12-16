@@ -1,6 +1,8 @@
+import ROUTES from '@/lib/constants/routes';
 import useCharacterStore from '@/store/character-store';
 import { type Character } from '@/types';
 import { IoIosHeart, IoMdHeartEmpty } from 'react-icons/io';
+import { useNavigate } from 'react-router-dom';
 
 interface CharacterItemProps {
     character: Character;
@@ -11,11 +13,12 @@ export default function CharacterItem({
     character,
     isStarred,
 }: CharacterItemProps) {
-    const { name, image, species } = character;
+    const { id, name, image, species } = character;
     const { addStarredCharacter, removeStarredCharacter } = useCharacterStore();
+    const navigate = useNavigate();
 
     const handleItemClick = () => {
-        console.log('li');
+        navigate(`${ROUTES.CHARACTERS}/${id}`);
     };
 
     const handleUnstarCharacterIconClick = (e: React.MouseEvent) => {
