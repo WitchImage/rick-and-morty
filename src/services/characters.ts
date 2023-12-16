@@ -26,3 +26,18 @@ export function getCharacters({ page }: getCharactersParams) {
         }
     `;
 }
+
+export function getCharacter(characterId: string) {
+    return gql`
+        query Character {
+            character(id: ${characterId}) {
+                id
+                name
+                status
+                species
+                gender
+                image
+            }
+        }
+    `;
+}
