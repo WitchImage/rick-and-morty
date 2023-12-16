@@ -28,7 +28,11 @@ export default function DesktopNavbar() {
                     <hr className="my-3" />
                     <ul className="divide-y">
                         {Object.values(starredCharacters).map((c) => (
-                            <CharacterItem character={c} isStarred={true} />
+                            <CharacterItem
+                                key={c.id}
+                                character={c}
+                                isStarred={true}
+                            />
                         ))}
                     </ul>
                 </section>
@@ -43,7 +47,11 @@ export default function DesktopNavbar() {
                     {characters.map((c) => {
                         if (starredCharacters[c.id]) return;
                         return (
-                            <CharacterItem character={c} isStarred={false} />
+                            <CharacterItem
+                                key={c.id}
+                                character={c}
+                                isStarred={false}
+                            />
                         );
                     })}
                 </ul>
