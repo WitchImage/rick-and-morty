@@ -16,6 +16,9 @@ export default {
                     500: 'var(--gray-color-500)',
                     700: 'var(--gray-color-700)',
                 },
+                mblue: {
+                    DEFAULT: 'var(--mobile-blue-color)',
+                },
             },
             borderRadius: {
                 md: 'var(--border-radius-md)',
