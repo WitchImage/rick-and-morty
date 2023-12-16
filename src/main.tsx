@@ -1,22 +1,35 @@
-import React from 'react';
+import React, { Suspense, lazy } from 'react';
 import ReactDOM from 'react-dom/client';
 import './index.css';
 import { RouterProvider, createBrowserRouter } from 'react-router-dom';
-import Home from './pages/home/home.tsx';
 import ROUTES from './lib/constants/routes.ts';
 import { ApolloClient, InMemoryCache, ApolloProvider } from '@apollo/client';
 
 console.log(import.meta.env.REACT_APP_PUBLIC_API);
-
 const client = new ApolloClient({
     uri: 'https://rickandmortyapi.com/graphql',
     cache: new InMemoryCache(),
 });
 
+const HomePage = lazy(() => import('@/pages/home/home.tsx'));
+const CharacterPage = lazy(() => import('@/pages/character/character.tsx'));
+
 const router = createBrowserRouter([
     {
-        path: ROUTES.home,
-        element: <Home />,
+        path: ROUTES.HOME,
+        element: (
+            <Suspense>
+                <HomePage />
+            </Suspense>
+        ),
+    },
+    {
+        path: `${ROUTES.CHARACTERS}/:characterId`,
+        element: (
+            <Suspense>
+                <CharacterPage />
+            </Suspense>
+        ),
     },
 ]);
 
