@@ -1,21 +1,29 @@
 import useCharacterStore from '@/store/character-store';
 import SearchBar from '../search-bar/search-bar';
 import CharacterItem from './character-item';
+import CharactersFilter from '../characters-filter/characters-filter';
+import { useState } from 'react';
 
 export default function DesktopNavbar() {
+    const [showFilters, setShowFilters] = useState<boolean>(false);
     const { characters, starredCharacters } = useCharacterStore();
     const starredCharactersLength = Object.values(starredCharacters).length;
 
     return (
-        <nav className="h-full bg-gray-100/50 px-[23px]">
+        <nav className="relative h-full bg-gray-100/50">
             <span className="text-3xl block mt-[42px] px-[24px] mb-[25px]">
                 Rick and Morty list
             </span>
-            <section className="mb-[45px]">
-                <SearchBar />
+
+            <section className="relative mb-[45px]">
+                <div className="mx-[23px]">
+                    <SearchBar setShowFilters={setShowFilters} />
+                </div>
+                <CharactersFilter open={showFilters} setOpen={setShowFilters} />
             </section>
+
             {starredCharactersLength > 0 && (
-                <section>
+                <section className="mx-[23px]">
                     <span className="text-xs ml-[36px]">{`STARRED CHARACTERS ( ${starredCharactersLength} )`}</span>
                     <hr className="my-3" />
                     <ul className="divide-y">
@@ -26,7 +34,7 @@ export default function DesktopNavbar() {
                 </section>
             )}
 
-            <section className="mt-[20px]">
+            <section className="mt-[20px] mx-[23px]">
                 <span className="text-xs ml-[36px]">{`CHARACTERS ( ${
                     characters.length - starredCharactersLength
                 } )`}</span>
