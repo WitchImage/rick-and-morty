@@ -6,13 +6,14 @@ interface CardProps extends HTMLAttributes<HTMLDivElement> {
     className?: string;
 }
 
-export default function Card({ children, className }: CardProps) {
+export default function Card({ children, className, ...props }: CardProps) {
     return (
         <div
             className={cn(
                 'rounded-md bg-white flex flex-col items-center shadow-md border-gray-500',
                 className
             )}
+            {...props}
         >
             {children}
         </div>
