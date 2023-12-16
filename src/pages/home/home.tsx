@@ -3,11 +3,17 @@ import { getCharacters } from '../../services/characters';
 import { Character } from '@/types';
 import MainLayout from '@/layouts/main-layout';
 import CharacterCard from './components/character-card';
+import useCharacterStore from '@/store/character-store';
+import { useEffect } from 'react';
 
 export default function Home() {
+    const { setCharacters } = useCharacterStore();
     const { data } = useQuery(getCharacters({ page: 1 }));
     const characters: Character[] = data?.characters.results ?? [];
-    console.log(characters);
+
+    useEffect(() => {
+        if (characters.length > 0) setCharacters(characters);
+    }, [characters]);
 
     return (
         <MainLayout>
