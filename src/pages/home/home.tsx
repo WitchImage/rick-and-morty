@@ -5,10 +5,14 @@ import MainLayout from '@/layouts/main-layout';
 import CharacterCard from './components/character-card';
 import useCharacterStore from '@/store/character-store';
 import { useEffect } from 'react';
+import useFiltersStore from '@/store/filters-store';
 
 export default function Home() {
     const { setCharacters, characters } = useCharacterStore();
-    const { data } = useQuery(getCharacters({ page: 1 }));
+    const { characterFilter, speciesFilter } = useFiltersStore();
+    const { data } = useQuery(
+        getCharacters({ page: 1, filters: { characterFilter, speciesFilter } })
+    );
     const c: Character[] = data?.characters.results ?? [];
 
     useEffect(() => {
