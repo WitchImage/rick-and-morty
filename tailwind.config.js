@@ -10,6 +10,7 @@ export default {
                     700: 'var(--primary-color-700)',
                 },
                 secondary: {
+                    100: 'var(--secondary-color-100)',
                     600: 'var(--secondary-color-600)',
                 },
                 gray: {
