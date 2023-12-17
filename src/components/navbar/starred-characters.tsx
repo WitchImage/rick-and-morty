@@ -7,7 +7,7 @@ export default function StarredCharacters() {
     const { characterFilter } = useFiltersStore();
 
     const starredCharactersLength = Object.values(starredCharacters).length;
-    if (starredCharactersLength < 1 && characterFilter !== 'All') return;
+    if (starredCharactersLength < 1 || characterFilter !== 'All') return;
 
     return (
         <section className="mx-[23px]">
