@@ -63,6 +63,8 @@ const useCharacterStore = create<CharacterStore>()(
             {
                 name: 'comments',
                 partialize: (state) => ({
+                    characters: state.characters,
+                    starredCharacters: state.starredCharacters,
                     characterComments: state.characterComments,
                 }),
             }
