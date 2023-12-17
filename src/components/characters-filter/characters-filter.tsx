@@ -1,22 +1,44 @@
-import { useState } from 'react';
 import Button from '../button/button';
 import { GoArrowLeft } from 'react-icons/go';
+import useFiltersStore from '@/store/filters-store';
+import type { Characterfilter, SpeciesFilter } from '@/types';
 
 interface CharactersFilterProps {
     open: boolean;
     setOpen: (value: boolean) => void;
 }
 
+type FilterSelectionParams =
+    | {
+          filter: 'character';
+          value: Characterfilter;
+      }
+    | {
+          filter: 'species';
+          value: SpeciesFilter;
+      };
+
 export default function CharactersFilter({
     open,
     setOpen,
 }: CharactersFilterProps) {
-    const [characterFilter, setCharacterFilter] = useState<
-        'All' | 'Starred' | 'Others'
-    >('All');
-    const [speciesFilter, setSpeciesFilter] = useState<
-        'All' | 'Human' | 'Alien'
-    >('All');
+    const {
+        characterFilter,
+        speciesFilter,
+        setCharacterFilter,
+        setSpeciesFilter,
+    } = useFiltersStore();
+
+    const handleFilterClick = (params: FilterSelectionParams) => () => {
+        switch (params.filter) {
+            case 'character':
+                setCharacterFilter(params.value);
+                break;
+            case 'species':
+                setSpeciesFilter(params.value);
+                break;
+        }
+    };
 
     if (!open) return;
 
@@ -43,6 +65,10 @@ export default function CharactersFilter({
                             characterFilter === 'All' ? 'lightPrimary' : 'white'
                         }
                         className="h-[44px] w-full"
+                        onClick={handleFilterClick({
+                            filter: 'character',
+                            value: 'All',
+                        })}
                     >
                         All
                     </Button>
@@ -53,6 +79,10 @@ export default function CharactersFilter({
                                 : 'white'
                         }
                         className="h-[44px] w-full"
+                        onClick={handleFilterClick({
+                            filter: 'character',
+                            value: 'Starred',
+                        })}
                     >
                         Starred
                     </Button>
@@ -63,6 +93,10 @@ export default function CharactersFilter({
                                 : 'white'
                         }
                         className="h-[44px] w-full"
+                        onClick={handleFilterClick({
+                            filter: 'character',
+                            value: 'Others',
+                        })}
                     >
                         Others
                     </Button>
@@ -76,6 +110,10 @@ export default function CharactersFilter({
                             speciesFilter === 'All' ? 'lightPrimary' : 'white'
                         }
                         className="h-[44px] w-full"
+                        onClick={handleFilterClick({
+                            filter: 'species',
+                            value: 'All',
+                        })}
                     >
                         All
                     </Button>
@@ -84,6 +122,10 @@ export default function CharactersFilter({
                             speciesFilter === 'Human' ? 'lightPrimary' : 'white'
                         }
                         className="h-[44px] w-full"
+                        onClick={handleFilterClick({
+                            filter: 'species',
+                            value: 'Human',
+                        })}
                     >
                         Human
                     </Button>
@@ -92,6 +134,10 @@ export default function CharactersFilter({
                             speciesFilter === 'Alien' ? 'lightPrimary' : 'white'
                         }
                         className="h-[44px] w-full"
+                        onClick={handleFilterClick({
+                            filter: 'species',
+                            value: 'Alien',
+                        })}
                     >
                         Alien
                     </Button>
