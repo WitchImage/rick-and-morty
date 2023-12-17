@@ -6,6 +6,7 @@ import { useQuery } from '@apollo/client';
 import { useNavigate, useParams } from 'react-router-dom';
 import { FaArrowLeft } from 'react-icons/fa';
 import StarButton from '@/components/star-button';
+import Comments from './components/comments';
 
 export default function Character() {
     const navigate = useNavigate();
@@ -69,6 +70,8 @@ export default function Character() {
                         <span>{gender}</span>
                     </div>
                 </section>
+                <hr className="my-4" />
+                <Comments />
             </main>
         </MainLayout>
     );
