@@ -1,7 +1,11 @@
 import Button from '../button/button';
 import { GoArrowLeft } from 'react-icons/go';
 import useFiltersStore from '@/store/filters-store';
-import type { Characterfilter, SpeciesFilter } from '@/types';
+import type { Character, Characterfilter, SpeciesFilter } from '@/types';
+import { useLazyQuery } from '@apollo/client';
+import useCharacterStore from '@/store/character-store';
+import { useState } from 'react';
+import { getCharacters } from '@/services/characters';
 
 interface CharactersFilterProps {
     open: boolean;
@@ -22,6 +26,7 @@ export default function CharactersFilter({
     open,
     setOpen,
 }: CharactersFilterProps) {
+    const { starredCharacters, setCharacters } = useCharacterStore();
     const {
         characterFilter,
         speciesFilter,
@@ -29,15 +34,59 @@ export default function CharactersFilter({
         setSpeciesFilter,
     } = useFiltersStore();
 
-    const handleFilterClick = (params: FilterSelectionParams) => () => {
-        switch (params.filter) {
-            case 'character':
-                setCharacterFilter(params.value);
+    const [localCharacterFilter, setLocalCharacterFilter] =
+        useState<Characterfilter>(characterFilter);
+    const [localSpeciesFilter, setLocalSpeciesFilter] =
+        useState<SpeciesFilter>(speciesFilter);
+
+    const [query] = useLazyQuery(
+        getCharacters({
+            page: 1,
+            filters: {
+                characterFilter: localCharacterFilter,
+                speciesFilter: localSpeciesFilter,
+            },
+        }),
+        {
+            fetchPolicy: 'network-only',
+        }
+    );
+
+    const handleFilterSelectionClick =
+        (params: FilterSelectionParams) => () => {
+            switch (params.filter) {
+                case 'character':
+                    setLocalCharacterFilter(params.value);
+                    break;
+                case 'species':
+                    setLocalSpeciesFilter(params.value);
+                    break;
+            }
+        };
+
+    const filterStarredCharacters = (charactersToFilter: Character[]) => {
+        const starredCharactersIDs = Object.keys(starredCharacters);
+        return charactersToFilter.filter((c) =>
+            starredCharactersIDs.includes(c.id)
+        );
+    };
+
+    const handleFilterClick = async () => {
+        setCharacterFilter(localCharacterFilter);
+        setSpeciesFilter(localSpeciesFilter);
+        const { data } = await query();
+        const newCharacters: Character[] = data?.characters.results ?? [];
+
+        switch (characterFilter) {
+            case 'All':
+                setCharacters(newCharacters);
                 break;
-            case 'species':
-                setSpeciesFilter(params.value);
+            case 'Starred':
+                setCharacters(filterStarredCharacters(newCharacters));
                 break;
         }
+
+        setOpen(false);
     };
 
     if (!open) return;
@@ -62,10 +111,12 @@ export default function CharactersFilter({
                 <div className="grid grid-cols-[repeat(3,102px)] gap-[8px] w-full">
                     <Button
                         variant={
-                            characterFilter === 'All' ? 'lightPrimary' : 'white'
+                            localCharacterFilter === 'All'
+                                ? 'lightPrimary'
+                                : 'white'
                         }
                         className="h-[44px] w-full"
-                        onClick={handleFilterClick({
+                        onClick={handleFilterSelectionClick({
                             filter: 'character',
                             value: 'All',
                         })}
@@ -74,12 +125,12 @@ export default function CharactersFilter({
                     </Button>
                     <Button
                         variant={
-                            characterFilter === 'Starred'
+                            localCharacterFilter === 'Starred'
                                 ? 'lightPrimary'
                                 : 'white'
                         }
                         className="h-[44px] w-full"
-                        onClick={handleFilterClick({
+                        onClick={handleFilterSelectionClick({
                             filter: 'character',
                             value: 'Starred',
                         })}
@@ -88,12 +139,12 @@ export default function CharactersFilter({
                     </Button>
                     <Button
                         variant={
-                            characterFilter === 'Others'
+                            localCharacterFilter === 'Others'
                                 ? 'lightPrimary'
                                 : 'white'
                         }
                         className="h-[44px] w-full"
-                        onClick={handleFilterClick({
+                        onClick={handleFilterSelectionClick({
                             filter: 'character',
                             value: 'Others',
                         })}
@@ -107,10 +158,12 @@ export default function CharactersFilter({
                 <div className="grid grid-cols-[repeat(3,102px)] gap-[8px] w-full">
                     <Button
                         variant={
-                            speciesFilter === 'All' ? 'lightPrimary' : 'white'
+                            localSpeciesFilter === 'All'
+                                ? 'lightPrimary'
+                                : 'white'
                         }
                         className="h-[44px] w-full"
-                        onClick={handleFilterClick({
+                        onClick={handleFilterSelectionClick({
                             filter: 'species',
                             value: 'All',
                         })}
@@ -119,10 +172,12 @@ export default function CharactersFilter({
                     </Button>
                     <Button
                         variant={
-                            speciesFilter === 'Human' ? 'lightPrimary' : 'white'
+                            localSpeciesFilter === 'Human'
+                                ? 'lightPrimary'
+                                : 'white'
                         }
                         className="h-[44px] w-full"
-                        onClick={handleFilterClick({
+                        onClick={handleFilterSelectionClick({
                             filter: 'species',
                             value: 'Human',
                         })}
@@ -131,10 +186,12 @@ export default function CharactersFilter({
                     </Button>
                     <Button
                         variant={
-                            speciesFilter === 'Alien' ? 'lightPrimary' : 'white'
+                            localSpeciesFilter === 'Alien'
+                                ? 'lightPrimary'
+                                : 'white'
                         }
                         className="h-[44px] w-full"
-                        onClick={handleFilterClick({
+                        onClick={handleFilterSelectionClick({
                             filter: 'species',
                             value: 'Alien',
                         })}
@@ -145,7 +202,7 @@ export default function CharactersFilter({
             </div>
             <Button
                 variant="gray"
-                onClick={() => setOpen(false)}
+                onClick={handleFilterClick}
                 className="absolute bottom-0 inset-x-0 mx-auto w-full mb-3 max-w-[322px] lg:mb-0 lg:static"
             >
                 Filter
