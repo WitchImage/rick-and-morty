@@ -1,6 +1,6 @@
 import type { CharacterComments, Character, Comment } from '@/types';
 import { create } from 'zustand';
-import { persist } from 'zustand/middleware';
+import { persist, devtools } from 'zustand/middleware';
 
 interface CommentToPost {
     characterId: string;
@@ -18,52 +18,57 @@ interface CharacterStore {
 }
 
 const useCharacterStore = create<CharacterStore>()(
-    persist(
-        (set) => ({
-            characters: [],
-            starredCharacters: {},
-            characterComments: {},
-            setCharacters: (c) => set(() => ({ characters: c })),
-            addStarredCharacter: (c) =>
-                set((state) => {
-                    const sc = { ...state.starredCharacters };
-                    sc[c.id] = c;
-                    return {
-                        starredCharacters: sc,
-                    };
-                }),
-            removeStarredCharacter: (characterId) =>
-                set((state) => {
-                    const sc = { ...state.starredCharacters };
-                    delete sc[characterId];
-                    return {
-                        starredCharacters: sc,
-                    };
-                }),
-            addComent: (comment) =>
-                set((state) => {
-                    const { message, characterId } = comment;
-                    const comments = { ...state.characterComments };
+    devtools(
+        persist(
+            (set) => ({
+                characters: [],
+                starredCharacters: {},
+                characterComments: {},
+                setCharacters: (c) => set(() => ({ characters: c })),
+                addStarredCharacter: (c) =>
+                    set((state) => {
+                        const sc = { ...state.starredCharacters };
+                        sc[c.id] = c;
+                        return {
+                            starredCharacters: sc,
+                        };
+                    }),
+                removeStarredCharacter: (characterId) =>
+                    set((state) => {
+                        const sc = { ...state.starredCharacters };
+                        delete sc[characterId];
+                        return {
+                            starredCharacters: sc,
+                        };
+                    }),
+                addComent: (comment) =>
+                    set((state) => {
+                        const { message, characterId } = comment;
+                        const comments = { ...state.characterComments };
 
-                    const newComment: Comment = {
-                        message: message,
-                        createdAt: new Date().toISOString(),
-                    };
+                        const newComment: Comment = {
+                            message: message,
+                            createdAt: new Date().toISOString(),
+                        };
 
-                    if (!comments[characterId])
-                        comments[characterId] = [newComment];
-                    else comments[characterId].unshift(newComment);
+                        if (!comments[characterId])
+                            comments[characterId] = [newComment];
+                        else comments[characterId].unshift(newComment);
 
-                    return {
-                        characterComments: comments,
-                    };
-                }),
-        }),
-        {
-            name: 'comments',
-            partialize: (state) => ({
-                characterComments: state.characterComments,
+                        return {
+                            characterComments: comments,
+                        };
+                    }),
             }),
+            {
+                name: 'comments',
+                partialize: (state) => ({
+                    characterComments: state.characterComments,
+                }),
+            }
+        ),
+        {
+            name: 'charactersStore',
         }
     )
 );
