@@ -1,10 +1,11 @@
-import useCharacterStore from '@/store/character-store';
 import SearchBar from '../search-bar/search-bar';
-import CharacterItem from './character-item';
 import CharactersFilter from '../characters-filter/characters-filter';
 import { useState } from 'react';
 import { cn } from '@/lib/utils/cn';
 import Button from '../button/button';
+import FilterredCharactersInfo from './filterred-characters-info';
+import StarredCharacters from './starred-characters';
+import CharactersList from './characters-list';
 
 interface CharactersNavbarProps {
     setShow?: (value: boolean) => void;
@@ -16,8 +17,6 @@ export default function CharactersNavbar({
     className,
 }: CharactersNavbarProps) {
     const [showFilters, setShowFilters] = useState<boolean>(false);
-    const { characters, starredCharacters } = useCharacterStore();
-    const starredCharactersLength = Object.values(starredCharacters).length;
 
     return (
         <nav className={cn('relative h-full bg-gray-100/50', className)}>
@@ -42,40 +41,9 @@ export default function CharactersNavbar({
                 <CharactersFilter open={showFilters} setOpen={setShowFilters} />
             </section>
 
-            {starredCharactersLength > 0 && (
-                <section className="mx-[23px]">
-                    <span className="text-xs ml-[36px]">{`STARRED CHARACTERS ( ${starredCharactersLength} )`}</span>
-                    <hr className="my-3" />
-                    <ul className="divide-y">
-                        {Object.values(starredCharacters).map((c) => (
-                            <CharacterItem
-                                key={c.id}
-                                character={c}
-                                isStarred={true}
-                            />
-                        ))}
-                    </ul>
-                </section>
-            )}
-
-            <section className="mt-[20px] mx-[23px]">
-                <span className="text-xs ml-[36px]">{`CHARACTERS ( ${
-                    characters.length - starredCharactersLength
-                } )`}</span>
-                <hr className="mt-3" />
-                <ul className="divide-y">
-                    {characters.map((c) => {
-                        if (starredCharacters[c.id]) return;
-                        return (
-                            <CharacterItem
-                                key={c.id}
-                                character={c}
-                                isStarred={false}
-                            />
-                        );
-                    })}
-                </ul>
-            </section>
+            <FilterredCharactersInfo />
+            <StarredCharacters />
+            <CharactersList />
         </nav>
     );
 }
