@@ -1,12 +1,11 @@
 import useCharacterStore from '@/store/character-store';
 import useFiltersStore from '@/store/filters-store';
 
-export default function FilterredCharacters() {
-    const { characters, starredCharacters } = useCharacterStore();
+export default function FilterredCharactersInfo() {
+    const { characters } = useCharacterStore();
     const { characterFilter, speciesFilter } = useFiltersStore();
 
-    const totalCharacters =
-        characters.length + Object.values(starredCharacters).length;
+    const totalCharacters = characters.length;
     const totalFilters =
         (characterFilter !== 'All' ? 1 : 0) + (speciesFilter !== 'All' ? 1 : 0);
 
