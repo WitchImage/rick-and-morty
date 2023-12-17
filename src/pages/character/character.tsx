@@ -71,7 +71,7 @@ export default function Character() {
                     </div>
                 </section>
                 <hr className="my-4" />
-                <Comments />
+                <Comments characterId={characterId} />
             </main>
         </MainLayout>
     );
