@@ -12,3 +12,12 @@ export type Character = {
 
 export type Characterfilter = 'Starred' | 'Others' | 'All';
 export type SpeciesFilter = Species | 'All';
+
+export type Comment = {
+    message: string;
+    createdAt: string;
+};
+
+export type CharacterComments = {
+    [characterId: string]: Comment[];
+};
