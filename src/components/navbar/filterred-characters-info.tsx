@@ -3,11 +3,15 @@ import useFiltersStore from '@/store/filters-store';
 
 export default function FilterredCharactersInfo() {
     const { characters } = useCharacterStore();
-    const { characterFilter, speciesFilter } = useFiltersStore();
+    const { characterFilter, speciesFilter, genderFilter, statusFilter } =
+        useFiltersStore();
 
     const totalCharacters = characters.length;
     const totalFilters =
-        (characterFilter !== 'All' ? 1 : 0) + (speciesFilter !== 'All' ? 1 : 0);
+        (characterFilter !== 'All' ? 1 : 0) +
+        (speciesFilter !== 'All' ? 1 : 0) +
+        (statusFilter !== 'All' ? 1 : 0) +
+        (genderFilter !== 'All' ? 1 : 0);
 
     if (totalFilters < 1) return;
 
