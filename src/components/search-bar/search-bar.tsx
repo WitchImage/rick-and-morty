@@ -37,12 +37,16 @@ export default function SearchBar({ setShowFilters }: SearchBarProps) {
     };
 
     return (
-        <div className="w-full h-[52px] bg-gray-500 flex flex-row items-center px-[20px] py-[16px] rounded-md">
+        <div
+            className="w-full h-[52px] bg-gray-500 flex flex-row items-center px-[20px] py-[16px] rounded-md"
+            id="searchBar"
+        >
             <SearchIcon />
             <input
                 placeholder="Search or filter results"
                 className="flex-1 bg-transparent outline-none mx-[8px]"
                 onChange={(e) => setSearch(e.target.value)}
+                id="searchInput"
             />
             <Button
                 variant="unstyled"
@@ -50,6 +54,7 @@ export default function SearchBar({ setShowFilters }: SearchBarProps) {
                 onClick={() => setShowFilters(true)}
                 aria-label="Filters"
                 disabled={loading}
+                id="filtersButton"
             >
                 <FilterIcon />
             </Button>
@@ -59,6 +64,7 @@ export default function SearchBar({ setShowFilters }: SearchBarProps) {
                 onClick={handleOrderByButtonClick}
                 aria-label="Order by alphabetically"
                 disabled={loading}
+                id="orderByButton"
             >
                 <TiSortAlphabetically size={25} className="fill-primary-600" />
             </Button>
