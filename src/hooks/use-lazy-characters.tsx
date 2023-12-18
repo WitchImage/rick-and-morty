@@ -30,10 +30,17 @@ export default function useLazyCharacters({
     );
 
     const filterStarredCharacters = (charactersToFilter: Character[]) => {
-        const starredCharactersIDs = Object.keys(starredCharacters);
-        return charactersToFilter.filter((c) =>
-            starredCharactersIDs.includes(c.id)
+        const charactersCopy = charactersToFilter.filter(
+            (c) => starredCharacters[c.id] !== undefined
         );
+        return charactersCopy;
+    };
+
+    const filterOtherCharacters = (charactersToFilter: Character[]) => {
+        const charactersCopy = charactersToFilter.filter(
+            (c) => starredCharacters[c.id] === undefined
+        );
+        return charactersCopy;
     };
 
     const getLazyCharacters = async () => {
@@ -43,6 +50,9 @@ export default function useLazyCharacters({
         switch (characterFilter) {
             case 'All':
                 setCharacters(newCharacters);
+                break;
+            case 'Others':
+                setCharacters(filterOtherCharacters(newCharacters));
                 break;
             case 'Starred':
                 setCharacters(filterStarredCharacters(newCharacters));
