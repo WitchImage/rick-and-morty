@@ -22,16 +22,6 @@ interface CharactersFilterProps {
     setOpen: (value: boolean) => void;
 }
 
-// type FilterSelectionParams =
-//     | {
-//           filter: 'character';
-//           value: Characterfilter;
-//       }
-//     | {
-//           filter: 'species';
-//           value: SpeciesFilter;
-//       };
-
 export default function CharactersFilter({
     open,
     setOpen,
@@ -69,18 +59,6 @@ export default function CharactersFilter({
             fetchPolicy: 'network-only',
         }
     );
-
-    // const handleFilterSelectionClick =
-    //     (params: FilterSelectionParams) => () => {
-    //         switch (params.filter) {
-    //             case 'character':
-    //                 setLocalCharacterFilter(params.value);
-    //                 break;
-    //             case 'species':
-    //                 setLocalSpeciesFilter(params.value);
-    //                 break;
-    //         }
-    //     };
 
     const filterStarredCharacters = (charactersToFilter: Character[]) => {
         const starredCharactersIDs = Object.keys(starredCharacters);
