@@ -10,7 +10,7 @@ export default function StarredCharacters() {
         (c) => starredCharacters[c.id] !== undefined
     );
     const starredCharactersLength = realStarredCharacters.length;
-    if (starredCharactersLength < 1 || characterFilter !== 'All') return;
+    if (starredCharactersLength < 1 || characterFilter === 'Others') return;
 
     return (
         <section className="mx-[23px]">
