@@ -3,13 +3,32 @@ import SearchIcon from '../svgs/search-icon';
 import Button from '../button/button';
 import { TiSortAlphabetically } from 'react-icons/ti';
 import useCharacterStore from '@/store/character-store';
+import { useEffect, useState } from 'react';
+import useDebounce from '@/hooks/use-debounce';
+import useLazyCharacters from '@/hooks/use-lazy-characters';
+import useFiltersStore from '@/store/filters-store';
 
 interface SearchBarProps {
     setShowFilters: (value: boolean) => void;
 }
 
 export default function SearchBar({ setShowFilters }: SearchBarProps) {
+    const [search, setSearch] = useState<string>('');
+    const debouncedSearch = useDebounce(search, 500);
     const { orderBy, setOrderBy } = useCharacterStore();
+    const { characterFilter, speciesFilter, genderFilter, statusFilter } =
+        useFiltersStore();
+    const { getLazyCharacters, loading } = useLazyCharacters({
+        characterFilter,
+        speciesFilter,
+        genderFilter,
+        statusFilter,
+        nameFilter: debouncedSearch,
+    });
+
+    useEffect(() => {
+        getLazyCharacters();
+    }, [debouncedSearch]);
 
     const handleOrderByButtonClick = () => {
         if (orderBy === 'none') setOrderBy('A-Z');
@@ -23,12 +42,14 @@ export default function SearchBar({ setShowFilters }: SearchBarProps) {
             <input
                 placeholder="Search or filter results"
                 className="flex-1 bg-transparent outline-none mx-[8px]"
+                onChange={(e) => setSearch(e.target.value)}
             />
             <Button
                 variant="unstyled"
                 className="p-1 rounded-md w-fit h-fit hover:bg-primary-100"
                 onClick={() => setShowFilters(true)}
                 aria-label="Filters"
+                disabled={loading}
             >
                 <FilterIcon />
             </Button>
@@ -37,6 +58,7 @@ export default function SearchBar({ setShowFilters }: SearchBarProps) {
                 className="h-auto p-1 ml-3 rounded-md w-fit hover:bg-primary-100"
                 onClick={handleOrderByButtonClick}
                 aria-label="Order by alphabetically"
+                disabled={loading}
             >
                 <TiSortAlphabetically size={25} className="fill-primary-600" />
             </Button>
