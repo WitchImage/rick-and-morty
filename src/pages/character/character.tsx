@@ -7,6 +7,7 @@ import { useNavigate, useParams } from 'react-router-dom';
 import { FaArrowLeft } from 'react-icons/fa';
 import StarButton from '@/components/star-button';
 import Comments from './components/comments';
+import Loader from '@/components/loader';
 
 export default function Character() {
     const navigate = useNavigate();
@@ -23,19 +24,39 @@ export default function Character() {
     if (loading) {
         return (
             <MainLayout>
-                <main>
-                    <h1>Cargando</h1>
+                <main className="flex justify-center w-full h-full mt-24">
+                    <Loader />
                 </main>
             </MainLayout>
         );
     }
 
     const character: Character = data?.character;
+    if (!character) {
+        return (
+            <MainLayout>
+                <main className="lg:mx-[100px] mt-[40px] mx-[24px]">
+                    <FaArrowLeft
+                        size={20}
+                        onClick={() => navigate(ROUTES.HOME)}
+                        className="fill-primary-600 hover:cursor-pointer mb-[28px]"
+                    />
+                    <h1>Character not found</h1>
+                </main>
+            </MainLayout>
+        );
+    }
+
     const { name, image, species, status, gender } = character;
     return (
         <MainLayout>
-            <main className="mx-[100px] mt-[40px]">
+            <main className="lg:mx-[100px] mt-[40px] mx-[24px]">
                 <section className="flex flex-col w-full space-y-[8px] pb-[16px]">
+                    <FaArrowLeft
+                        size={20}
+                        onClick={() => navigate(ROUTES.HOME)}
+                        className="fill-primary-600 hover:cursor-pointer mb-[28px]"
+                    />
                     <div className="relative h-[75px] w-[75px]">
                         <img
                             src={image}
@@ -47,16 +68,9 @@ export default function Character() {
                             className="absolute bottom-0 right-0 bg-white"
                         />
                     </div>
-                    <div className="flex items-center gap-4">
-                        <FaArrowLeft
-                            size={20}
-                            onClick={() => navigate(ROUTES.HOME)}
-                            className="fill-[var(--foreground-color) hover:cursor-pointer"
-                        />
-                        <h1 className="text-xl font-bold">{name}</h1>
-                    </div>
+                    <h1 className="text-xl font-bold">{name}</h1>
                 </section>
-                <section className="w-full grid grid-rows-[repeat(3,75px)]">
+                <section className="w-full grid grid-rows-[repeat(3,75px)] divide-y">
                     <div className="flex flex-col justify-center w-full">
                         <span className="block font-medium">Species</span>
                         <span>{species}</span>
