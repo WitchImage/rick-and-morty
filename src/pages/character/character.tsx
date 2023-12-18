@@ -23,7 +23,7 @@ export default function Character() {
     if (loading) {
         return (
             <MainLayout>
-                <main>
+                <main className="lg:mx-[100px] mt-[40px] mx-[24px]">
                     <h1>Cargando</h1>
                 </main>
             </MainLayout>
@@ -31,6 +31,21 @@ export default function Character() {
     }
 
     const character: Character = data?.character;
+    if (!character) {
+        return (
+            <MainLayout>
+                <main className="lg:mx-[100px] mt-[40px] mx-[24px]">
+                    <FaArrowLeft
+                        size={20}
+                        onClick={() => navigate(ROUTES.HOME)}
+                        className="fill-primary-600 hover:cursor-pointer mb-[28px]"
+                    />
+                    <h1>Character not found</h1>
+                </main>
+            </MainLayout>
+        );
+    }
+
     const { name, image, species, status, gender } = character;
     return (
         <MainLayout>
