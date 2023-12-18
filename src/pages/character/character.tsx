@@ -7,6 +7,7 @@ import { useNavigate, useParams } from 'react-router-dom';
 import { FaArrowLeft } from 'react-icons/fa';
 import StarButton from '@/components/star-button';
 import Comments from './components/comments';
+import Loader from '@/components/loader';
 
 export default function Character() {
     const navigate = useNavigate();
@@ -23,8 +24,8 @@ export default function Character() {
     if (loading) {
         return (
             <MainLayout>
-                <main className="lg:mx-[100px] mt-[40px] mx-[24px]">
-                    <h1>Cargando</h1>
+                <main className="flex justify-center w-full h-full mt-24">
+                    <Loader />
                 </main>
             </MainLayout>
         );
