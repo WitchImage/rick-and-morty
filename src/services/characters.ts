@@ -1,24 +1,39 @@
-import type { Characterfilter, SpeciesFilter } from '@/types';
+import type { Filters } from '@/types';
 import { gql } from '@apollo/client';
+
+type NameFilter = { nameFilter: string };
 
 interface getCharactersParams {
     page: number;
-    filters?: {
-        characterFilter: Characterfilter;
-        speciesFilter: SpeciesFilter;
-    };
+    filters?: Filters & NameFilter;
 }
 
 export function getCharacters({
     page,
-    filters = { characterFilter: 'All', speciesFilter: 'All' },
+    filters = {
+        characterFilter: 'All',
+        speciesFilter: 'All',
+        genderFilter: 'All',
+        statusFilter: 'All',
+        nameFilter: '',
+    },
 }: getCharactersParams) {
     const getFilters = () => {
         let queryFilters = '{';
 
-        const { speciesFilter } = filters;
-        if (speciesFilter !== 'All')
+        const { speciesFilter, genderFilter, statusFilter, nameFilter } =
+            filters;
+        if (speciesFilter !== undefined && speciesFilter !== 'All')
             queryFilters += `species: "${speciesFilter}"`;
+
+        if (genderFilter !== undefined && genderFilter !== 'All')
+            queryFilters += `, gender: "${genderFilter}"`;
+
+        if (statusFilter !== undefined && statusFilter !== 'All')
+            queryFilters += `, status: "${statusFilter}"`;
+
+        if (nameFilter !== undefined && nameFilter !== '')
+            queryFilters += `, name: "${nameFilter}"`;
 
         queryFilters += '}';
         return queryFilters;
