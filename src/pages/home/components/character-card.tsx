@@ -23,6 +23,7 @@ export default function CharacterCard({ character }: CharacterCardProps) {
                 src={image}
                 alt={`Imagen de ${name}`}
                 className="absolute w-full h-full rounded-md"
+                loading={'lazy'}
             />
             <span className="absolute bottom-0 z-10 px-2 py-1 mb-4 text-sm font-medium text-white rounded-full bg-primary-600">
                 {species}
