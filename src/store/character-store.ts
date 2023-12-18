@@ -9,15 +9,22 @@ interface CommentToPost {
     message: string;
 }
 
+interface CharactersHashTable {
+    [key: string]: Character;
+}
+
 interface CharacterStore {
     orderBy: OrderBy;
     characters: Character[];
-    starredCharacters: { [key: string]: Character };
+    starredCharacters: CharactersHashTable;
+    deletedCharacters: CharactersHashTable;
     characterComments: CharacterComments;
     setOrderBy: (value: OrderBy) => void;
     setCharacters: (characters: Character[]) => void;
     addStarredCharacter: (character: Character) => void;
     removeStarredCharacter: (characterId: string) => void;
+    addDeletedCharacter: (character: Character) => void;
+    removeDeletedCharacter: (characterId: string) => void;
     addComent: (comment: CommentToPost) => void;
 }
 
@@ -28,6 +35,7 @@ const useCharacterStore = create<CharacterStore>()(
                 orderBy: 'none',
                 characters: [],
                 starredCharacters: {},
+                deletedCharacters: {},
                 characterComments: {},
                 setOrderBy: (value) =>
                     set((state) => {
@@ -63,6 +71,28 @@ const useCharacterStore = create<CharacterStore>()(
                             starredCharacters: sc,
                         };
                     }),
+                addDeletedCharacter: (c) =>
+                    set((state) => {
+                        const dc = { ...state.deletedCharacters };
+                        dc[c.id] = c;
+                        return {
+                            deletedCharacters: dc,
+                            characters: state.characters.filter(
+                                (c) => dc[c.id] === undefined
+                            ),
+                        };
+                    }),
+                removeDeletedCharacter: (characterId) =>
+                    set((state) => {
+                        const dc = { ...state.deletedCharacters };
+                        delete dc[characterId];
+                        return {
+                            deletedCharacters: dc,
+                            characters: state.characters.filter(
+                                (c) => dc[c.id] === undefined
+                            ),
+                        };
+                    }),
                 addComent: (comment) =>
                     set((state) => {
                         const { message, characterId } = comment;
@@ -87,6 +117,7 @@ const useCharacterStore = create<CharacterStore>()(
                 partialize: (state) => ({
                     characters: state.characters,
                     starredCharacters: state.starredCharacters,
+                    deletedCharacters: state.deletedCharacters,
                     characterComments: state.characterComments,
                 }),
             }
