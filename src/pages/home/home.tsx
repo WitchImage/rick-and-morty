@@ -9,9 +9,19 @@ import useFiltersStore from '@/store/filters-store';
 
 export default function Home() {
     const { setCharacters, characters } = useCharacterStore();
-    const { characterFilter, speciesFilter } = useFiltersStore();
+    const { characterFilter, speciesFilter, genderFilter, statusFilter } =
+        useFiltersStore();
     const { data } = useQuery(
-        getCharacters({ page: 1, filters: { characterFilter, speciesFilter } })
+        getCharacters({
+            page: 1,
+            filters: {
+                characterFilter,
+                speciesFilter,
+                genderFilter,
+                statusFilter,
+                nameFilter: '',
+            },
+        })
     );
     const c: Character[] = data?.characters.results ?? [];
 
