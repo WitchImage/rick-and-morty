@@ -7,6 +7,11 @@ export default function FilterredCharactersInfo() {
         useFiltersStore();
 
     const totalCharacters = characters.length;
+
+    // const totalResults = () => {
+
+    // };
+
     const totalFilters =
         (characterFilter !== 'All' ? 1 : 0) +
         (speciesFilter !== 'All' ? 1 : 0) +
@@ -23,6 +28,7 @@ export default function FilterredCharactersInfo() {
             <div className="px-[12px] py-[2px] bg-secondary-100 text-secondary-600 font-semibold rounded-full">
                 {`${totalFilters} Filter${totalFilters > 1 ? 's' : ''}`}
             </div>
+            <hr className="my-[my-3]" />
         </section>
     );
 }

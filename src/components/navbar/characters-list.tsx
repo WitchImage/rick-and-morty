@@ -3,7 +3,9 @@ import CharacterItem from './character-item';
 
 export default function CharactersList() {
     const { characters, starredCharacters } = useCharacterStore();
-    const starredCharactersLength = Object.values(starredCharacters).length;
+    const starredCharactersLength = characters.filter(
+        (c) => starredCharacters[c.id] !== undefined
+    ).length;
 
     return (
         <section className="mt-[20px] mx-[23px]">
