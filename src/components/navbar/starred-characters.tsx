@@ -3,18 +3,21 @@ import CharacterItem from './character-item';
 import useFiltersStore from '@/store/filters-store';
 
 export default function StarredCharacters() {
-    const { starredCharacters } = useCharacterStore();
+    const { characters, starredCharacters } = useCharacterStore();
     const { characterFilter } = useFiltersStore();
 
-    const starredCharactersLength = Object.values(starredCharacters).length;
-    if (starredCharactersLength < 1 || characterFilter !== 'All') return;
+    const realStarredCharacters = characters.filter(
+        (c) => starredCharacters[c.id] !== undefined
+    );
+    const starredCharactersLength = realStarredCharacters.length;
+    if (starredCharactersLength < 1 || characterFilter === 'Others') return;
 
     return (
         <section className="mx-[23px]">
             <span className="text-xs ml-[36px]">{`STARRED CHARACTERS ( ${starredCharactersLength} )`}</span>
             <hr className="my-3" />
             <ul className="divide-y">
-                {Object.values(starredCharacters).map((c) => (
+                {realStarredCharacters.map((c) => (
                     <CharacterItem key={c.id} character={c} isStarred={true} />
                 ))}
             </ul>

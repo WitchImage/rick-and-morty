@@ -2,6 +2,7 @@ import ROUTES from '@/lib/constants/routes';
 import { type Character } from '@/types';
 import { useNavigate } from 'react-router-dom';
 import StarButton from '../star-button';
+import DeleteButton from '../delete-button';
 
 interface CharacterItemProps {
     character: Character;
@@ -32,10 +33,10 @@ export default function CharacterItem({ character }: CharacterItemProps) {
                 <span className="block font-bold">{name}</span>
                 <span className="text-sm">{species}</span>
             </div>
-            <StarButton
-                character={character}
-                className="z-10 absolute right-0 mr-[20px]"
-            />
+            <div className="z-10 absolute right-0 mr-[20px] flex flex-row">
+                <DeleteButton character={character} />
+                <StarButton character={character} />
+            </div>
         </li>
     );
 }

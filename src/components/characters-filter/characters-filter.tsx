@@ -2,20 +2,17 @@ import Button from '../button/button';
 import { GoArrowLeft } from 'react-icons/go';
 import useFiltersStore from '@/store/filters-store';
 import type {
-    Character,
     Characterfilter,
     GenderFilter,
     SpeciesFilter,
     StatusFilter,
 } from '@/types';
-import { useLazyQuery } from '@apollo/client';
-import useCharacterStore from '@/store/character-store';
 import { useState } from 'react';
-import { getCharacters } from '@/services/characters';
 import GenderFilters from './gender-filters';
 import StatusFilters from './status-filters';
 import SpeciesFilters from './species-filters';
 import StarredFilters from './starred-filters';
+import useLazyCharacters from '@/hooks/use-lazy-characters';
 
 interface CharactersFilterProps {
     open: boolean;
@@ -26,7 +23,6 @@ export default function CharactersFilter({
     open,
     setOpen,
 }: CharactersFilterProps) {
-    const { starredCharacters, setCharacters } = useCharacterStore();
     const {
         characterFilter,
         speciesFilter,
@@ -44,48 +40,22 @@ export default function CharactersFilter({
     const [localGenderFilter, setLocalGenderFilter] =
         useState<GenderFilter>(genderFilter);
 
-    const [query] = useLazyQuery(
-        getCharacters({
-            page: 1,
-            filters: {
-                characterFilter: localCharacterFilter,
-                speciesFilter: localSpeciesFilter,
-                statusFilter: localStatusFilter,
-                genderFilter: localGenderFilter,
-                nameFilter: '',
-            },
-        }),
-        {
-            fetchPolicy: 'network-only',
-        }
-    );
-
-    const filterStarredCharacters = (charactersToFilter: Character[]) => {
-        const starredCharactersIDs = Object.keys(starredCharacters);
-        return charactersToFilter.filter((c) =>
-            starredCharactersIDs.includes(c.id)
-        );
-    };
+    const { getLazyCharacters } = useLazyCharacters({
+        characterFilter: localCharacterFilter,
+        speciesFilter: localSpeciesFilter,
+        statusFilter: localStatusFilter,
+        genderFilter: localGenderFilter,
+        nameFilter: '',
+    });
 
     const handleFilterClick = async () => {
         setFilters({
             characterFilter: localCharacterFilter,
             speciesFilter: localSpeciesFilter,
-            genderFilter: localGenderFilter,
             statusFilter: localStatusFilter,
+            genderFilter: localGenderFilter,
         });
-
-        const { data } = await query();
-        const newCharacters: Character[] = data?.characters.results ?? [];
-
-        switch (characterFilter) {
-            case 'All':
-                setCharacters(newCharacters);
-                break;
-            case 'Starred':
-                setCharacters(filterStarredCharacters(newCharacters));
-                break;
-        }
+        getLazyCharacters();
 
         setOpen(false);
     };
