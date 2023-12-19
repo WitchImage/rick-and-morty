@@ -118,4 +118,3 @@ Where id can be passed dynamically
 ## Deployment
 
 This app was deployed in AWS using Amplify. You can access the deployed app using this link: https://main.d1dsa2po4tzunr.amplifyapp.com
-
