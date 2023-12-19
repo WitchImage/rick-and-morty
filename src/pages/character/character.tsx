@@ -1,13 +1,16 @@
+/* eslint-disable react-hooks/rules-of-hooks */
 import MainLayout from '@/layouts/main-layout';
 import ROUTES from '@/lib/constants/routes';
 import { getCharacter } from '@/services/characters';
 import type { Character } from '@/types';
-import { useQuery } from '@apollo/client';
+import { useLazyQuery } from '@apollo/client';
 import { useNavigate, useParams } from 'react-router-dom';
 import { FaArrowLeft } from 'react-icons/fa';
 import StarButton from '@/components/star-button';
 import Comments from './components/comments';
 import Loader from '@/components/loader';
+import { useEffect } from 'react';
+import { toast } from 'react-toastify';
 
 export default function Character() {
     const navigate = useNavigate();
@@ -19,7 +22,16 @@ export default function Character() {
     }
 
     // eslint-disable-next-line react-hooks/rules-of-hooks
-    const { loading, data } = useQuery(getCharacter(characterId));
+    const [query, { loading, data }] = useLazyQuery(getCharacter(characterId));
+
+    useEffect(() => {
+        try {
+            query();
+            // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        } catch (e: any) {
+            toast.error(e.message);
+        }
+    }, []);
 
     if (loading) {
         return (

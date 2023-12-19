@@ -1,33 +1,27 @@
-import { useQuery } from '@apollo/client';
-import { getCharacters } from '../../services/characters';
-import { Character } from '@/types';
 import MainLayout from '@/layouts/main-layout';
 import CharacterCard from './components/character-card';
 import useCharacterStore from '@/store/character-store';
 import { useEffect } from 'react';
 import useFiltersStore from '@/store/filters-store';
+import useLazyCharacters from '@/hooks/use-lazy-characters';
 
 export default function Home() {
-    const { setCharacters, characters } = useCharacterStore();
+    const { characters } = useCharacterStore();
     const { characterFilter, speciesFilter, genderFilter, statusFilter } =
         useFiltersStore();
-    const { data } = useQuery(
-        getCharacters({
-            page: 1,
-            filters: {
-                characterFilter,
-                speciesFilter,
-                genderFilter,
-                statusFilter,
-                nameFilter: '',
-            },
-        })
-    );
-    const c: Character[] = data?.characters.results ?? [];
+    const { getLazyCharacters } = useLazyCharacters({
+        characterFilter,
+        speciesFilter,
+        genderFilter,
+        statusFilter,
+        nameFilter: '',
+    });
 
     useEffect(() => {
-        if (c.length > 0) setCharacters(c);
-    }, [c]);
+        if (characters.length > 0) return;
+
+        getLazyCharacters();
+    }, []);
 
     return (
         <MainLayout>
