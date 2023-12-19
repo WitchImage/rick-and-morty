@@ -1,30 +1,74 @@
-# React + TypeScript + Vite
+# Rick and Morty web app
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+## Design
 
-Currently, two official plugins are available:
+This project uses the following folder structure:
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
-
-## Expanding the ESLint configuration
-
-If you are developing a production application, we recommend updating the configuration to enable type aware lint rules:
-
-- Configure the top-level `parserOptions` property like this:
-
-```js
-export default {
-  // other rules...
-  parserOptions: {
-    ecmaVersion: 'latest',
-    sourceType: 'module',
-    project: ['./tsconfig.json', './tsconfig.node.json'],
-    tsconfigRootDir: __dirname,
-  },
-}
+```
+ROOT DIR
+├── tsconfig.json
+├── vite.config.ts
+├── tailwind.config.js
+├── index.html
+├── __tests__/
+├── public/
+└── src
+    ├── index.css
+    ├── main.tsx
+    ├── router.tsx
+    ├── types/
+    ├── hooks/
+    ├── components/
+    ├── services/
+    ├── store/
+    ├── layouts/
+    └── lib
+        ├── utils/
+        └── constants/
+    └── pages
+        └── home
+          ├── home.tsx
+          └── components/
+        └── character
+          ├── character.tsx
+          └── components/
 ```
 
-- Replace `plugin:@typescript-eslint/recommended` to `plugin:@typescript-eslint/recommended-type-checked` or `plugin:@typescript-eslint/strict-type-checked`
-- Optionally add `plugin:@typescript-eslint/stylistic-type-checked`
-- Install [eslint-plugin-react](https://github.com/jsx-eslint/eslint-plugin-react) and add `plugin:react/recommended` & `plugin:react/jsx-runtime` to the `extends` list
+#### Key aspects:
+
+-   Component-Based architecture
+-   Functional components
+-   CSS variables defined in **index.css** and used in **tailwind.config** in case they are needed outside tailwind context
+-   Every page is a mini-project which means every page sub-folder can potentially have the
+    same folders as the src folder
+-   Every folder inside **src/** and outside **pages/** represents common features for the whole project
+
+## Tech stack
+
+-   Vite as bundler
+-   Typescript
+-   TailwindCSS
+-   React 18 and React Router DOM
+-   GraphQL and Apollo
+-   React Testing Library
+-   Zustand for global state manager
+
+## Pre-requisites
+
+-   This project was created with Node v20
+-   This project uses yarn as package manager. To install yarn run: `npm i -g yarn`
+
+## Installation
+
+To run this project locally run the following commands on your terminal:
+
+-   Clone the repository: `git clone https://github.com/WitchImage/rick-and-morty.git`
+-   Navigate to the clones repository folder: `cd rick-and-morty`
+-   Install the dependencies: `yarn`
+-   Run project: `yarn dev`
+-   To run tests: `yarn test`
+
+## Deployment
+
+This app was deployed in AWS using Amplify. You can access the deployed app using this link: https://main.d1dsa2po4tzunr.amplifyapp.com
+
